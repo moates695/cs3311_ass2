@@ -11,7 +11,7 @@ argc = len(sys.argv)
 
 try:
 	db = psycopg2.connect("dbname=imdb")
-	if (argc < 2 or (argc == 3 and sys.argv[2] <= 0)):
+	if (argc != 3 or type(sys.argv[2]) != int or sys.argv[2] <= 0):
 		raise ValueError
 	elif (argc == 3):
 		N = sys.argv[2]
@@ -21,6 +21,7 @@ try:
 			  where cr.role = 'director'
 			  group by n.name
 			  order by count(*) desc limit {N};"""
+	cur.execute(qry)
 	for tuple in cur.fetchall():
 		print(f"{tuple[0]} {tuple[1]}")
 	cur.close()
