@@ -11,10 +11,10 @@ argc = len(sys.argv)
 
 try:
 	db = psycopg2.connect("dbname=imdb")
-	if (argc != 3 or type(sys.argv[2]) != int or sys.argv[2] <= 0):
+	if (argc != 3 or int(sys.argv[2]) <= 0):
 		raise ValueError
 	elif (argc == 3):
-		N = sys.argv[2]
+		N = int(sys.argv[2])
 	cur = db.cursor()
 	qry = f"""select count(*), n.name from names as n
 			  inner join crew_roles as cr on n.id = cr.name_id
