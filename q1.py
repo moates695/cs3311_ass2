@@ -3,24 +3,31 @@
 import sys
 import psycopg2
 
-# define any local helper functions here
-
-# set up some globals
-
 usage = "Usage: q1.py [N]"
 db = None
-
-# process command-line args
+N = 10
 
 argc = len(sys.argv)
 
-# manipulate database
-
 try:
 	db = psycopg2.connect("dbname=imdb")
-	# ... add your code here ...
+	if (argc < 2 or (argc == 3 and sys.argv[2] <= 0)):
+		raise ValueError
+	elif (argc == 3):
+		N = sys.argv[2]
+	cur = db.cursor()
+	qry = f"""select count(*), n.name from names as n
+			  inner join crew_roles as cr on n.id = cr.name_id
+			  where cr.role = 'director'
+			  group by n.name
+			  order by count(*) desc limit {N};"""
+	for tuple in cur.fetchall():
+		print(f"{tuple[0]} {tuple[1]}")
+	cur.close()
 except psycopg2.Error as err:
 	print("DB error: ", err)
+except ValueError:
+	print(usage)
 finally:
 	if db:
 		db.close()
