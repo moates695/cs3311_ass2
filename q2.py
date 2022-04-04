@@ -17,6 +17,7 @@ def clean(old_tuples):
 
 usage = "Usage: q2.py 'PartialMovieTitle'"
 db = None
+cur = None
 
 argc = len(sys.argv)
 
@@ -63,11 +64,12 @@ order by ordering"""
                     print(f" ({string})")
         else:
             print(f"{tuples1[0][2]} ({tuples1[0][3]}) has no alternative releases")
-    cur.close()
 except psycopg2.Error as err:
     print("DB error: ", err)
 except ValueError: 
     print(usage)
 finally:
+    if cur:
+        cur.close()
     if db:
         db.close()

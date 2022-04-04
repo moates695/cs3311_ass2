@@ -17,6 +17,7 @@ def clean(old_tuples):
 
 usage = "Usage: q3.py 'MovieTitlePattern' [Year]"
 db = None
+cur = None
 year = None
 
 argc = len(sys.argv)
@@ -32,12 +33,12 @@ try:
     if year == None:
         qry1 = f"""select id, rating, title, start_year from movies
 where title ~* E'{title}'
-order by rating desc, start_year, title"""
+order by rating desc, start_year, title;"""
     else:
         qry1 = f"""select id, rating, title, start_year from movies
 where title ~* E'{title}'
 and start_year = {year}
-order by rating desc, start_year, title"""
+order by rating desc, start_year, title;"""
     cur.execute(qry1)
     tuples1 = clean(cur.fetchall())
     if len(tuples1) == 0:
@@ -78,11 +79,12 @@ order by p.ordering, cr.role;"""
         print("===============")
         for tuple in tuples1:
             print(f"{tuple[1]} {tuple[2]} ({tuple[3]})")
-    cur.close()
 except psycopg2.Error as err:
     print("DB error: ", err)
 except ValueError:
     print(f'{usage}')
 finally:
+    if cur:
+        cur.close()
     if db:
         db.close()

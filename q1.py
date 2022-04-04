@@ -17,6 +17,7 @@ def clean(old_tuples):
 
 usage = "Usage: q1.py [N]"
 db = None
+cur = None
 N = 10
 
 argc = len(sys.argv)
@@ -38,11 +39,12 @@ order by count(*) desc, n.name limit {N};"""
     cur.execute(qry)
     for tuple in clean(cur.fetchall()):
         print(f"{tuple[0]} {tuple[1]}")
-    cur.close()
 except psycopg2.Error as err:
     print("DB error: ", err)
 except ValueError:
     print(usage)
 finally:
+    if cur:
+        cur.close()
     if db:
         db.close()
