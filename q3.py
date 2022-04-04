@@ -29,19 +29,22 @@ try:
         year = int(sys.argv[2])
     cur = db.cursor()
     title = sys.argv[1].replace("'", "\\'")
-    if year != None:
+    if year == None:
         qry1 = f"""select id, rating, title, start_year from movies
 where title ~* E'{title}'
-and start_year = {year}
 order by rating desc, start_year, title"""
     else:
         qry1 = f"""select id, rating, title, start_year from movies
 where title ~* E'{title}'
+and start_year = {year}
 order by rating desc, start_year, title"""
     cur.execute(qry1)
     tuples1 = clean(cur.fetchall())
     if len(tuples1) == 0:
-        print(f"No movie matching '{sys.argv[1]}'")
+        if year == None:
+            print(f"No movie matching '{sys.argv[1]}'")
+        else:
+            print(f"No movie matching '{sys.argv[1]}' {year}")
     elif len(tuples1) == 1:
         qry2 = f"""select n.name, ar.played from acting_roles as ar 
 inner join names as n on ar.name_id = n.id
@@ -68,7 +71,10 @@ order by p.ordering, cr.role;"""
         for member in crew:
             print(f" {member[0]}: {member[1][0].upper() + member[1][1:].replace('_', ' ')}")
     else:
-        print(f"Movies matching '{sys.argv[1]}'")
+        if year == None:
+            print(f"Movies matching '{sys.argv[1]}'")
+        else:
+            print(f"Movies matching '{sys.argv[1]}' {year}")
         print("===============")
         for tuple in tuples1:
             print(f"{tuple[1]} {tuple[2]} ({tuple[3]})")
