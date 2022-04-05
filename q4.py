@@ -77,7 +77,7 @@ order by count(*) desc, mg.genre;"""
         genres = clean(cur.fetchmany(3))
         print(f"Filmography for {tuples1[0][1]} {lifespan(tuples1[0])}")    
         print("===============")
-        print(f"Personal rating: {rating}")
+        print(f"Personal Rating: {rating}")
         print(f"Top 3 Genres:")
         for genre in genres:
             print(f" {genre[0]}")
@@ -126,7 +126,7 @@ order by cr.role;"""
             print(f"Names matching '{sys.argv[1]}' {year}")
         print("===============")
         for person in tuples1:
-            print(f"{person[0]} {lifespan(person)}")
+            print(f"{person[1]} {lifespan(person)}")
 except psycopg2.Error as err:
     print("DB error: ", err)
 except ValueError:
