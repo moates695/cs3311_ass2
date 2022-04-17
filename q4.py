@@ -39,8 +39,6 @@ and birth_year = {year}
 order by name, birth_year, id;"""
     cur.execute(qry1)
     tuples1 = clean(cur.fetchall())
-    #print(len(tuples1))
-    #print(qry1)
     if len(tuples1) == 0:
         if year == None:
             print(f"No name matching '{sys.argv[1]}'")
