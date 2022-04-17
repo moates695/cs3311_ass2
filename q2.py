@@ -50,7 +50,8 @@ order by ordering"""
                         string += ", "
                     if tuple[2] != None:
                         string += f"language: {tuple[2]}"
-                    print(f" ({string})")
+                    if len(string) != 0:
+                        print(f" ({string})")
         else:
             print(f"{tuples1[0][2]} ({tuples1[0][3]}) has no alternative releases")
 except psycopg2.Error as err:
